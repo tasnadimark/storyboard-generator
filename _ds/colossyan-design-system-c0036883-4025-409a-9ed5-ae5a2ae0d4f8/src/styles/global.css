@@ -1,0 +1,545 @@
+html {
+  scroll-behavior: smooth;
+}
+
+:root {
+  /* Mains */
+  --white: #FFFFFF;
+  --off-white: #F5F4F2;
+  --off-black: #151515;
+  --light-coral: #FDD7CF;
+  --coral: #FF7C73;
+  --dark-coral: #4E0D09;
+  --black: #000000;
+
+  /* Neutrals */
+  --light-grey: #CFCECE;
+  --grey: #979797;
+  --dark-grey: #505050;
+
+  /* Secondary - Blue */
+  --light-blue: #CDE9F5;
+  --blue: #70CCF4;
+  --dark-blue: #11174F;
+
+  /* Secondary - Yellow */
+  --light-yellow: #FFF1C1;
+  --yellow: #FADD76;
+  --dark-yellow: #312702;
+
+  /* Secondary - Green */
+  --light-green: #D6F6DA;
+  --green: #7DE98A;
+  --dark-green: #1E3403;
+
+  /* Typography - Text size tokens */
+  --text-size-xhuge: 72px;
+  --text-size-huge: 62px;
+  --text-size-xxxlarge: 52px;
+  --text-size-xxlarge: 30px;
+  --text-size-xlarge: 24px;
+  --text-size-large: 20px;
+  --text-size-medium: 17px;
+  --text-size-regular: 16px;
+  --text-size-small: 14px;
+  --text-size-tiny: 12px;
+  --text-size-xtiny: 10px;
+
+  /* Typography - Line height tokens */
+  --line-height-tight: 120%;
+  --line-height-snug: 130%;
+  --line-height-normal: 140%;
+  --line-height-relaxed: 150%;
+
+  /* Typography - Font weight tokens */
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Typography - Heading tokens */
+  --heading-h1-size: 62px;
+  --heading-h1-line-height: 120%;
+  --heading-h1-letter-spacing: -2px;
+
+  --heading-h2-size: 36px;
+  --heading-h2-line-height: 120%;
+  --heading-h2-letter-spacing: -0.8px;
+
+  --heading-h3-size: 30px;
+  --heading-h3-line-height: 120%;
+  --heading-h3-letter-spacing: -0.5px;
+
+  --heading-h4-size: 20px;
+  --heading-h4-line-height: 130%;
+  --heading-h4-letter-spacing: -0.5px;
+
+  --heading-h5-size: 14px;
+  --heading-h5-line-height: 120%;
+  --heading-h5-letter-spacing: -0.5px;
+
+  --heading-h6-size: 12px;
+  --heading-h6-line-height: 120%;
+  --heading-h6-letter-spacing: -0.5px;
+
+  /* Spacing scale */
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-40: 40px;
+  --space-48: 48px;
+  --space-60: 60px;
+  --space-80: 80px;
+
+  /* Border radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-pill: 100px;
+
+  /* Border colors */
+  --border-light: #E8E8E8;
+  --border-medium: #d0d0d0;
+
+  /* Box shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.1);
+
+  /* Container widths */
+  --container-sm: 600px;
+  --container-md: 720px;
+  --container-lg: 900px;
+  --container-xl: 1100px;
+  --container-max: 1280px;
+
+  /* Interactive state colors */
+  --hover-dark: #2a2a2a;
+  --hover-light: #f5f5f5;
+
+  /* Link colors (blog) */
+  --link-blue: #2c43b8;
+  --link-blue-hover: #1e2f82;
+
+  /* Overlays */
+  --overlay-black-50: rgba(0, 0, 0, 0.5);
+  --overlay-black-08: rgba(0, 0, 0, 0.08);
+  --overlay-white-15: rgba(255, 255, 255, 0.15);
+  --overlay-white-25: rgba(255, 255, 255, 0.25);
+}
+
+/* Base resets */
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: var(--font-weight-regular);
+  line-height: 130%;
+  color: var(--off-black);
+}
+
+/* Typography - Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  margin: 0;
+}
+
+h1 { font-size: var(--heading-h1-size); line-height: var(--heading-h1-line-height); letter-spacing: var(--heading-h1-letter-spacing); font-weight: var(--font-weight-regular); }
+h2 { font-size: var(--heading-h2-size); line-height: var(--heading-h2-line-height); letter-spacing: var(--heading-h2-letter-spacing); font-weight: var(--font-weight-regular); }
+h3 { font-size: var(--heading-h3-size); line-height: var(--heading-h3-line-height); letter-spacing: var(--heading-h3-letter-spacing); font-weight: var(--font-weight-regular); }
+h4 { font-size: var(--heading-h4-size); line-height: var(--heading-h4-line-height); letter-spacing: var(--heading-h4-letter-spacing); font-weight: var(--font-weight-regular); }
+h5 { font-size: var(--heading-h5-size); line-height: var(--heading-h5-line-height); letter-spacing: var(--heading-h5-letter-spacing); font-weight: var(--font-weight-regular); }
+h6 { font-size: var(--heading-h6-size); line-height: var(--heading-h6-line-height); letter-spacing: var(--heading-h6-letter-spacing); font-weight: var(--font-weight-regular); }
+
+/* Section subtitle – shared across components */
+.section-subtitle {
+  font-size: var(--text-size-regular);
+  line-height: var(--line-height-relaxed);
+  color: var(--dark-grey);
+  letter-spacing: -0.16px;
+  margin: 0;
+}
+
+/* Slider pagination – shared across Swiper components */
+.slider-pagination {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--off-white);
+  border-radius: 60px;
+  padding: 7px;
+}
+
+.slider-bullet {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--light-grey);
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.slider-bullet--active {
+  background: var(--off-black);
+}
+
+/* Typography - Text sizes */
+.text-size-xhuge   { font-size: var(--text-size-xhuge);   line-height: var(--line-height-tight); }
+.text-size-huge     { font-size: var(--text-size-huge);     line-height: var(--line-height-tight); }
+.text-size-xxxlarge { font-size: var(--text-size-xxxlarge); line-height: var(--line-height-tight); }
+.text-size-xxlarge  { font-size: var(--text-size-xxlarge);  line-height: var(--line-height-tight); }
+.text-size-xlarge   { font-size: var(--text-size-xlarge);   line-height: var(--line-height-snug); }
+.text-size-large    { font-size: var(--text-size-large);    line-height: var(--line-height-normal); }
+.text-size-medium   { font-size: var(--text-size-medium);  line-height: var(--line-height-relaxed); }
+.text-size-regular  { font-size: var(--text-size-regular); }
+.text-size-small    { font-size: var(--text-size-small); }
+.text-size-tiny     { font-size: var(--text-size-tiny); }
+.text-size-xtiny    { font-size: var(--text-size-xtiny); }
+
+/* Typography - Weight utilities */
+.text-weight-bold   { font-weight: var(--font-weight-regular); }
+.text-weight-medium { font-weight: var(--font-weight-regular); }
+.text-weight-light  { font-weight: var(--font-weight-light); }
+
+/* Heading underline decoration */
+.custom-underline {
+  background-image: url('/assets/heading-underline.svg');
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  padding-bottom: 0.1em;
+  display: inline;
+  white-space: nowrap;
+}
+
+/* Gradient highlighter behind text (coral → blue) */
+.heading-highlight {
+  background: linear-gradient(0deg, #ff7c737c, #70ccf472);
+  padding: 0 0.2em;
+  border-radius: var(--radius-md);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  line-height: 1.3;
+}
+
+/* Shared content-width container */
+.container {
+  width: auto;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+/* CTA Buttons */
+.cta-btn {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 20px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-size-regular);
+  font-weight: var(--font-weight-regular);
+  letter-spacing: -0.64px;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  border: none;
+}
+
+.cta-btn--primary {
+  background: var(--off-black);
+  color: var(--white);
+}
+
+.cta-btn--primary:hover {
+  background: var(--hover-dark);
+}
+
+.cta-btn--secondary {
+  background: var(--white);
+  color: var(--off-black);
+}
+
+.cta-btn--secondary:hover {
+  background: var(--off-white);
+}
+
+.section-cta {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+/* Main sections wrapper */
+.sections {
+  display: flex;
+  flex-direction: column;
+  gap: 120px;
+  padding-top: 101px;
+}
+
+/* ──────────────────────────────────────────────
+   Gradient blob (reusable behind images/sections)
+   ────────────────────────────────────────────── */
+.gradient-blob {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  overflow: visible;
+}
+
+.gradient-blob__1,
+.gradient-blob__2,
+.gradient-blob__3 {
+  position: absolute;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Size modes: contain (100%), cover (140% bleed), free (variant px) */
+.gradient-blob--contain .gradient-blob__1 {
+  width: 100%;
+  height: 100%;
+  left: 50%;
+  top: 50%;
+}
+
+.gradient-blob--contain .gradient-blob__2 {
+  width: 80%;
+  height: 80%;
+  left: 50%;
+  top: 50%;
+}
+
+.gradient-blob--contain .gradient-blob__3 {
+  width: 60%;
+  height: 60%;
+  left: 50%;
+  top: 50%;
+}
+
+.gradient-blob--cover .gradient-blob__1 {
+  width: 140%;
+  height: 140%;
+  left: 50%;
+  top: 50%;
+}
+
+.gradient-blob--cover .gradient-blob__2 {
+  width: 100%;
+  height: 100%;
+  left: 50%;
+  top: 50%;
+}
+
+.gradient-blob--cover .gradient-blob__3 {
+  width: 80%;
+  height: 80%;
+  left: 50%;
+  top: 50%;
+}
+
+/* 01 – Sunset on Venus */
+.gradient-blob--sunset-on-venus .gradient-blob__1 {
+  width: 820px;
+  height: 820px;
+  background: linear-gradient(to top, rgba(250, 221, 118, 0.4), var(--coral));
+  filter: blur(175px);
+  left: 50%;
+  top: 52%;
+}
+
+.gradient-blob--sunset-on-venus .gradient-blob__2 {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, var(--coral) 42%, transparent);
+  filter: blur(87.5px);
+  left: 58%;
+  top: 39%;
+}
+
+/* 02 – Distance Nebulae */
+.gradient-blob--distance-nebulae .gradient-blob__1 {
+  width: 820px;
+  height: 820px;
+  background: linear-gradient(to top, var(--coral), transparent);
+  filter: blur(175px);
+  left: 50%;
+  top: 45%;
+}
+
+.gradient-blob--distance-nebulae .gradient-blob__2 {
+  width: 394px;
+  height: 559px;
+  border-radius: 0;
+  background: linear-gradient(to top, var(--blue), transparent);
+  filter: blur(175px);
+  left: 50%;
+  top: 66%;
+}
+
+/* 03 – Alfheim Forest */
+.gradient-blob--alfheim-forest .gradient-blob__1 {
+  width: 624px;
+  height: 624px;
+  background: linear-gradient(37deg, transparent, var(--blue));
+  filter: blur(175px);
+  left: 47%;
+  top: 54%;
+}
+
+.gradient-blob--alfheim-forest .gradient-blob__2 {
+  width: 628px;
+  height: 628px;
+  background: linear-gradient(to top, transparent, var(--green));
+  filter: blur(131px);
+  left: 53%;
+  top: 47%;
+}
+
+/* 04 – Fragment of Saturn */
+.gradient-blob--fragment-of-saturn .gradient-blob__1 {
+  width: 820px;
+  height: 820px;
+  background: linear-gradient(to top, var(--coral), transparent);
+  filter: blur(175px);
+  left: 50%;
+  top: 46%;
+}
+
+.gradient-blob--fragment-of-saturn .gradient-blob__2 {
+  width: 445px;
+  height: 516px;
+  border-radius: 4px;
+  background: linear-gradient(to top, var(--blue), var(--yellow));
+  filter: blur(131px);
+  opacity: 0.4;
+  left: 50%;
+  top: 50%;
+}
+
+/* 05 – Poseidon's Realm */
+.gradient-blob--poseidons-realm .gradient-blob__1 {
+  width: 820px;
+  height: 820px;
+  background: linear-gradient(to top, rgba(17, 23, 79, 0.2), var(--blue));
+  filter: blur(175px);
+  left: 49%;
+  top: 52%;
+}
+
+.gradient-blob--poseidons-realm .gradient-blob__2 {
+  width: 404px;
+  height: 404px;
+  background: radial-gradient(circle, var(--coral), var(--dark-coral));
+  filter: blur(87.5px);
+  left: 69%;
+  top: 40%;
+}
+
+.gradient-blob--poseidons-realm .gradient-blob__3 {
+  width: 232px;
+  height: 232px;
+  background: radial-gradient(circle, var(--coral), transparent);
+  filter: blur(70px);
+  left: 23%;
+  top: 70%;
+}
+
+/* 06 – Cosmic Butterfly */
+.gradient-blob--cosmic-butterfly .gradient-blob__1 {
+  width: 511px;
+  height: 567px;
+  background: linear-gradient(39deg, var(--dark-green), var(--green));
+  filter: blur(175px);
+  left: 37%;
+  top: 51%;
+}
+
+.gradient-blob--cosmic-butterfly .gradient-blob__2 {
+  width: 511px;
+  height: 567px;
+  background: linear-gradient(39deg, var(--blue), var(--yellow));
+  filter: blur(175px);
+  left: 89%;
+  top: 62%;
+}
+
+/* 07 – Cosmic Butterfly Alt */
+.gradient-blob--cosmic-butterfly-alt .gradient-blob__1 {
+  width: 882px;
+  height: 509px;
+  background: linear-gradient(to top, rgba(112, 204, 244, 0.7), transparent);
+  filter: blur(123px);
+  left: 50%;
+  top: 49%;
+}
+
+.gradient-blob--cosmic-butterfly-alt .gradient-blob__2 {
+  width: 430px;
+  height: 555px;
+  border-radius: 0;
+  background: linear-gradient(to top, transparent, var(--coral) 46%, transparent);
+  filter: blur(191px);
+  left: 50%;
+  top: 50%;
+}
+
+/* Gradient mobile scaling */
+@media (max-width: 768px) {
+  .gradient-blob__1,
+  .gradient-blob__2,
+  .gradient-blob__3 {
+    scale: 0.6;
+  }
+}
+
+/* Tablet */
+@media (max-width: 991px) {
+  :root {
+    --heading-h1-size: 44px;
+    --text-size-xxxlarge: 44px;
+  }
+}
+
+/* Mobile landscape */
+@media (max-width: 767px) {
+  .container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .sections {
+    gap: 80px;
+    padding-top: 73px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 479px) {
+  :root {
+    --heading-h1-size: 34px;
+    --heading-h2-size: 26px;
+    --heading-h3-size: 24px;
+    --heading-h4-size: 18px;
+    --text-size-xhuge: 50px;
+    --text-size-huge: 34px;
+    --text-size-xxxlarge: 32px;
+    --text-size-xxlarge: 16px;
+    --text-size-xlarge: 16px;
+    --text-size-large: 18px;
+    --text-size-medium: 16px;
+    --text-size-regular: 14px;
+  }
+}

@@ -1,0 +1,485 @@
+<style>
+  :root{
+    --ink:#0F0B1A; --ink-2:#151029; --surface:#1C1638; --surface-2:#251E45;
+    --line:rgba(255,255,255,.09); --line-2:rgba(255,255,255,.14);
+    --violet:#8B6BFF; --violet-bright:#B49BFF; --coral:#FF6B8A; --mint:#46E0B0; --cyan:#4BC8FF;
+    --text:#ECE8FB; --muted:#A79FC4; --faint:#6E6690;
+    --sans:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+    --r:16px; --maxw:1120px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0}
+  .wrap{
+    font-family:var(--sans); color:var(--text);
+    background:
+      radial-gradient(1100px 600px at 78% -8%, rgba(139,107,255,.20), transparent 60%),
+      radial-gradient(900px 500px at 8% 4%, rgba(75,200,255,.10), transparent 55%),
+      var(--ink);
+    min-height:100dvh; line-height:1.5; overflow-x:hidden; padding-bottom:64px;
+  }
+  .container{max-width:var(--maxw); margin:0 auto; padding:0 24px}
+  a{color:inherit}
+  ::selection{background:rgba(139,107,255,.35)}
+
+  /* ---- top bar ---- */
+  .topbar{display:flex; align-items:center; gap:14px; padding:20px 0 8px}
+  .brand{display:flex; align-items:center; gap:10px; font-weight:650; letter-spacing:-.01em}
+  .brand .dot{width:20px;height:20px;border-radius:6px;background:linear-gradient(150deg,var(--violet),var(--coral));box-shadow:0 0 18px rgba(139,107,255,.6)}
+  .tag{font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--muted); border:1px solid var(--line); border-radius:999px; padding:4px 10px}
+  .tag.concept{margin-left:auto; color:var(--faint)}
+
+  /* ---- hero ---- */
+  .hero{padding:44px 0 8px; max-width:820px}
+  .eyebrow{font-family:var(--mono); font-size:12px; letter-spacing:.22em; text-transform:uppercase; color:var(--violet-bright); display:flex; align-items:center; gap:10px; margin-bottom:20px}
+  .eyebrow::before{content:""; width:26px; height:1px; background:var(--violet-bright); opacity:.7}
+  h1{font-size:clamp(2.1rem,5.2vw,3.5rem); line-height:1.02; letter-spacing:-.025em; margin:0 0 18px; font-weight:680; text-wrap:balance}
+  h1 .g{background:linear-gradient(100deg,var(--violet-bright),var(--cyan)); -webkit-background-clip:text; background-clip:text; color:transparent}
+  .sub{font-size:1.12rem; color:var(--muted); max-width:60ch; margin:0}
+
+  /* ---- filmstrip progress ---- */
+  .strip{display:flex; gap:10px; margin:30px 0 22px; flex-wrap:wrap}
+  .frame{flex:1 1 0; min-width:120px; border:1px solid var(--line); border-radius:10px; padding:10px 12px; background:rgba(255,255,255,.02); position:relative; transition:.35s}
+  .frame .no{font-family:var(--mono); font-size:11px; letter-spacing:.12em; color:var(--faint)}
+  .frame .lbl{font-size:.82rem; color:var(--muted); margin-top:3px; font-weight:550}
+  .frame::after{content:""; position:absolute; top:6px; right:8px; width:6px;height:6px;border-radius:2px;background:var(--faint); opacity:.5}
+  .frame.done{border-color:rgba(70,224,176,.4)}
+  .frame.done .no{color:var(--mint)} .frame.done::after{background:var(--mint); opacity:1}
+  .frame.active{border-color:var(--violet); background:rgba(139,107,255,.10); box-shadow:0 0 0 1px var(--violet) inset}
+  .frame.active .no{color:var(--violet-bright)} .frame.active .lbl{color:var(--text)} .frame.active::after{background:var(--violet-bright); opacity:1}
+
+  /* ---- panel / steps ---- */
+  .panel{background:linear-gradient(180deg,var(--surface),var(--ink-2)); border:1px solid var(--line); border-radius:var(--r); padding:30px; box-shadow:0 30px 70px -40px rgba(0,0,0,.8)}
+  .step-head{margin:0 0 4px}
+  .step-q{font-size:1.5rem; letter-spacing:-.02em; margin:0 0 6px; font-weight:640; text-wrap:balance}
+  .step-note{color:var(--muted); margin:0 0 24px; font-size:.98rem}
+  .screen{animation:rise .45s cubic-bezier(.2,.7,.2,1) both}
+  @keyframes rise{from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:none}}
+
+  .field{margin-bottom:22px}
+  .field label{display:block; font-family:var(--mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin-bottom:8px}
+  .field input{width:100%; background:var(--surface-2); border:1px solid var(--line-2); color:var(--text); border-radius:10px; padding:13px 14px; font-size:1rem; font-family:var(--sans)}
+  .field input::placeholder{color:var(--faint)}
+  .field input:focus{outline:none; border-color:var(--violet); box-shadow:0 0 0 3px rgba(139,107,255,.22)}
+
+  /* ---- industry grid ---- */
+  .grid-ind{display:grid; grid-template-columns:repeat(4,1fr); gap:12px}
+  .card-sel{text-align:left; cursor:pointer; background:var(--surface-2); border:1px solid var(--line); color:var(--text);
+    border-radius:12px; padding:16px; display:flex; flex-direction:column; gap:10px; font-family:var(--sans); transition:.18s; min-height:104px}
+  .card-sel:hover{border-color:var(--line-2); transform:translateY(-2px); background:#2a2350}
+  .card-sel:focus-visible{outline:none; border-color:var(--violet); box-shadow:0 0 0 3px rgba(139,107,255,.28)}
+  .card-sel .ic{color:var(--violet-bright)}
+  .card-sel .nm{font-weight:600; font-size:.98rem; letter-spacing:-.01em}
+  .card-sel[aria-pressed="true"]{border-color:var(--violet); background:rgba(139,107,255,.16); box-shadow:0 0 0 1px var(--violet) inset}
+  .card-sel[aria-pressed="true"] .ic{color:var(--text)}
+
+  /* ---- chips ---- */
+  .chips{display:flex; flex-wrap:wrap; gap:10px}
+  .chip{cursor:pointer; font-family:var(--sans); font-size:.95rem; color:var(--text); background:var(--surface-2);
+    border:1px solid var(--line); border-radius:999px; padding:10px 16px; transition:.16s; display:inline-flex; align-items:center; gap:9px}
+  .chip:hover{border-color:var(--line-2); transform:translateY(-1px)}
+  .chip:focus-visible{outline:none; border-color:var(--violet); box-shadow:0 0 0 3px rgba(139,107,255,.28)}
+  .chip .tick{width:15px;height:15px;border-radius:50%; border:1.5px solid var(--faint); display:grid; place-items:center; flex:none}
+  .chip[aria-pressed="true"]{border-color:var(--violet); background:rgba(139,107,255,.16)}
+  .chip[aria-pressed="true"] .tick{background:var(--violet); border-color:var(--violet)}
+  .chip[aria-pressed="true"] .tick svg{opacity:1}
+  .chip .tick svg{opacity:0}
+
+  /* ---- nav ---- */
+  .nav{display:flex; align-items:center; gap:14px; margin-top:28px; padding-top:22px; border-top:1px solid var(--line)}
+  .hint{font-family:var(--mono); font-size:11px; letter-spacing:.06em; color:var(--faint); margin-right:auto}
+  .btn{font-family:var(--sans); font-size:.98rem; font-weight:600; border-radius:10px; padding:12px 20px; cursor:pointer; border:1px solid var(--line-2); background:transparent; color:var(--text); transition:.16s}
+  .btn:hover{border-color:var(--text)}
+  .btn:focus-visible{outline:none; box-shadow:0 0 0 3px rgba(139,107,255,.3)}
+  .btn.ghost{border-color:transparent; color:var(--muted)} .btn.ghost:hover{color:var(--text)}
+  .btn.primary{background:linear-gradient(100deg,var(--violet),#6f4ff0); border-color:transparent; color:#fff; box-shadow:0 12px 30px -12px rgba(139,107,255,.8)}
+  .btn.primary:hover{filter:brightness(1.08)}
+  .btn[disabled]{opacity:.4; cursor:not-allowed; filter:none}
+
+  /* ---- loading ---- */
+  .loading{display:flex; flex-direction:column; align-items:center; justify-content:center; padding:70px 0; gap:22px; text-align:center}
+  .clap{width:74px;height:64px; position:relative}
+  .clap .board{position:absolute; bottom:0; width:74px;height:44px; border-radius:6px; background:var(--surface-2); border:1px solid var(--line-2)}
+  .clap .stick{position:absolute; top:0; left:0; width:74px;height:16px; border-radius:5px; background:repeating-linear-gradient(115deg,var(--text) 0 9px,var(--ink) 9px 18px); transform-origin:6px 12px; animation:clap 1.05s ease-in-out infinite}
+  @keyframes clap{0%,100%{transform:rotate(-20deg)} 50%{transform:rotate(0)}}
+  .loading .m{font-family:var(--mono); letter-spacing:.14em; text-transform:uppercase; font-size:12px; color:var(--violet-bright)}
+
+  /* ---- results ---- */
+  .res-head{display:flex; flex-direction:column; gap:16px; margin:8px 0 26px}
+  .brief{display:flex; flex-wrap:wrap; gap:8px}
+  .brief .b{font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); border:1px solid var(--line); border-radius:7px; padding:5px 10px}
+  .brief .b b{color:var(--text); font-weight:600}
+  h2.res-title{font-size:clamp(1.6rem,3.6vw,2.3rem); letter-spacing:-.025em; margin:0; font-weight:660; text-wrap:balance}
+  h2.res-title em{font-style:normal; color:var(--violet-bright)}
+
+  .board-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:16px}
+  .scene{grid-column:span 1; background:var(--surface); border:1px solid var(--line); border-radius:14px; overflow:hidden; display:flex; flex-direction:column; animation:rise .5s cubic-bezier(.2,.7,.2,1) both}
+  .scene.feat{grid-column:span 2; flex-direction:row}
+  .thumb{position:relative; aspect-ratio:16/9; flex:none; overflow:hidden}
+  .scene.feat .thumb{width:46%; aspect-ratio:auto}
+  .thumb .tc{position:absolute; top:10px; right:10px; font-family:var(--mono); font-size:11px; letter-spacing:.05em; color:#fff; background:rgba(0,0,0,.45); border-radius:6px; padding:3px 7px; backdrop-filter:blur(3px)}
+  .thumb .rec{position:absolute; top:12px; left:12px; display:flex; align-items:center; gap:6px; font-family:var(--mono); font-size:10px; letter-spacing:.16em; color:#fff}
+  .thumb .rec i{width:8px;height:8px;border-radius:50%;background:var(--coral); box-shadow:0 0 10px var(--coral); display:block}
+  .thumb .av{position:absolute; left:14%; bottom:0; width:42%; max-width:120px}
+  .thumb .av .head{width:38px;height:38px;border-radius:50%; margin:0 auto; background:rgba(255,255,255,.92)}
+  .thumb .av .body{height:34px; border-radius:26px 26px 0 0; margin-top:6px; background:rgba(255,255,255,.86)}
+  .thumb .cap{position:absolute; left:8px; right:8px; bottom:9px; text-align:center}
+  .thumb .cap span{font-size:11px; font-weight:600; color:#fff; background:rgba(0,0,0,.55); padding:3px 8px; border-radius:5px; line-height:1.35; box-decoration-break:clone; -webkit-box-decoration-break:clone}
+  .thumb .play{position:absolute; inset:0; margin:auto; width:48px;height:48px; border-radius:50%; background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.4); display:grid; place-items:center; opacity:0; transition:.2s; backdrop-filter:blur(4px)}
+  .scene:hover .play,.scene:focus-within .play{opacity:1}
+  .scene-body{padding:18px 20px 20px; display:flex; flex-direction:column; gap:9px; flex:1}
+  .scene.feat .scene-body{padding:26px 28px; justify-content:center}
+  .cat{display:flex; align-items:center; gap:8px; font-family:var(--mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted)}
+  .cat .cdot{width:8px;height:8px;border-radius:50%}
+  .scene h3{margin:0; font-size:1.12rem; letter-spacing:-.015em; font-weight:640; text-wrap:balance}
+  .scene.feat h3{font-size:1.5rem}
+  .scene p{margin:0; color:var(--muted); font-size:.93rem}
+  .ex{border-left:2px solid var(--line-2); padding:2px 0 2px 12px; margin-top:2px}
+  .ex .k{font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--faint); display:block; margin-bottom:2px}
+  .ex .v{font-size:.9rem; color:var(--text)}
+  .scene-foot{margin-top:auto; padding-top:12px; display:flex; align-items:center; gap:12px; flex-wrap:wrap}
+  .metric{font-family:var(--mono); font-size:11px; letter-spacing:.04em; color:var(--mint); display:inline-flex; align-items:center; gap:6px}
+  .feat-cta{margin-top:6px}
+
+  .startbadge{display:inline-flex; align-items:center; gap:8px; font-family:var(--mono); font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--coral); margin-bottom:2px}
+  .startbadge i{width:7px;height:7px;border-radius:50%;background:var(--coral)}
+
+  /* ---- closing band ---- */
+  .band{margin-top:22px; background:linear-gradient(120deg,rgba(139,107,255,.16),rgba(75,200,255,.08)); border:1px solid var(--line); border-radius:var(--r); padding:28px 30px; display:flex; align-items:center; gap:24px; flex-wrap:wrap}
+  .band .bt{flex:1 1 300px}
+  .band h4{margin:0 0 6px; font-size:1.2rem; letter-spacing:-.01em}
+  .band p{margin:0; color:var(--muted); font-size:.95rem; max-width:52ch}
+  .band .acts{display:flex; gap:10px; flex-wrap:wrap}
+
+  .foot{color:var(--faint); font-size:.8rem; text-align:center; margin-top:34px; font-family:var(--mono); letter-spacing:.04em}
+
+  /* ---- toast ---- */
+  .toast{position:fixed; left:50%; bottom:26px; transform:translateX(-50%) translateY(20px); background:var(--surface-2); border:1px solid var(--line-2); color:var(--text); padding:12px 18px; border-radius:10px; font-size:.9rem; opacity:0; pointer-events:none; transition:.3s; box-shadow:0 20px 40px -20px #000; z-index:50}
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(0)}
+
+  @media(max-width:820px){
+    .grid-ind{grid-template-columns:repeat(2,1fr)}
+    .board-grid{grid-template-columns:1fr}
+    .scene.feat{flex-direction:column} .scene.feat .thumb{width:100%; aspect-ratio:16/9}
+    .panel{padding:22px}
+  }
+  @media(prefers-reduced-motion:reduce){
+    .screen,.scene{animation:none} .clap .stick{animation:none} *{transition:none!important}
+  }
+</style>
+
+<div class="wrap">
+  <div class="container">
+    <div class="topbar">
+      <div class="brand"><span class="dot"></span> Colossyan</div>
+      <span class="tag">Use-Case Finder</span>
+      <span class="tag concept">Concept prototype</span>
+    </div>
+
+    <div class="hero">
+      <div class="eyebrow">Interactive · Adoption Studio</div>
+      <h1>Tell us what your team does.<br>We'll <span class="g">storyboard</span> how you'd use Colossyan.</h1>
+      <p class="sub">The blank editor is where good intentions go to die. Answer three quick questions and get a personalized shot-list of videos worth making first — mapped to your industry, your team, and what you're trying to move.</p>
+    </div>
+
+    <div id="strip" class="strip" aria-hidden="true"></div>
+
+    <div id="stage"></div>
+
+    <div class="foot">Concept built to attack the #1 renewal risk: accounts that never turn Colossyan into a habit.</div>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var reduce = window.matchMedia && matchMedia("(prefers-reduced-motion:reduce)").matches;
+
+  var ICON = {
+    healthcare:'<path d="M3 12h4l2 5 4-12 2 7h6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>',
+    manufacturing:'<path d="M3 20V10l5 3V10l5 3V6l5 3v11z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>',
+    finance:'<path d="M4 20h16M6 20V9m4 11V6m4 14v-8m4 8V4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>',
+    tech:'<rect x="3" y="4" width="18" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 21h8M12 17v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>',
+    proserv:'<rect x="3" y="7" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" fill="none" stroke="currentColor" stroke-width="1.6"/>',
+    retail:'<path d="M5 8h14l-1 12H6zM8 8V6a4 4 0 0 1 8 0v2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>',
+    education:'<path d="M12 4 2 9l10 5 8-4v6M6 12v5c0 1 2.7 2.5 6 2.5s6-1.5 6-2.5v-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>',
+    public:'<path d="M4 9 12 4l8 5M5 9v9M19 9v9M9 9v9M15 9v9M3 20h18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>'
+  };
+  var TICK = '<svg width="9" height="9" viewBox="0 0 12 12"><path d="M2 6.5 5 9l5-6" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var PLAY = '<svg width="16" height="16" viewBox="0 0 16 16"><path d="M5 3.5v9l8-4.5z" fill="#fff"/></svg>';
+
+  var INDUSTRIES = [
+    {k:'healthcare', n:'Healthcare & Pharma'},
+    {k:'manufacturing', n:'Manufacturing & Industrial'},
+    {k:'finance', n:'Financial Services'},
+    {k:'tech', n:'Technology & SaaS'},
+    {k:'proserv', n:'Professional Services'},
+    {k:'retail', n:'Retail & Hospitality'},
+    {k:'education', n:'Training & Education'},
+    {k:'public', n:'Government & Public Sector'}
+  ];
+  var ROLES = [
+    {k:'ld', n:'L&D / Training'},
+    {k:'hr', n:'HR / People Ops'},
+    {k:'sales', n:'Sales / Revenue Enablement'},
+    {k:'ops', n:'Operations'},
+    {k:'compliance', n:'Compliance / Risk'},
+    {k:'cs', n:'Customer Success / Support'},
+    {k:'comms', n:'Internal Comms / Marketing'}
+  ];
+  var GOALS = [
+    {k:'onboard', n:'Onboard new hires faster'},
+    {k:'compliance', n:'Standardize compliance & safety'},
+    {k:'global', n:'Train across languages & regions'},
+    {k:'sales_ramp', n:'Ramp product & sales knowledge'},
+    {k:'sop', n:'Capture SOPs & processes'},
+    {k:'cost', n:'Cut production time & cost'},
+    {k:'engage', n:'Lift engagement & completion'},
+    {k:'customer_ed', n:'Educate customers & users'}
+  ];
+
+  var CAT_COLOR = {
+    'Onboarding':'#8B6BFF','Enablement':'#46E0B0','Compliance':'#FF6B8A','Global':'#4BC8FF',
+    'Process':'#FFC24B','Scenario':'#B49BFF','Customer Ed':'#4BC8FF','Comms':'#8B6BFF',
+    'Frontline':'#FFC24B','Clinical':'#46E0B0','Academy':'#4BC8FF','Support':'#46E0B0','Quick win':'#FF6B8A'
+  };
+
+  // {IND} is replaced with the industry adjective, {ORG} with company or "your team"
+  var UC = [
+    {cat:'Quick win', t:'Turn a slide deck you already have into a video', d:'The fastest possible first win for {ORG}: drop in an existing onboarding or policy PowerPoint and Colossyan narrates every slide with an avatar. No blank canvas, no script from scratch.', ex:'Take last year\'s induction deck and publish it as a narrated video this afternoon.', tc:'2:10', m:'PPT in, video out', cap:'Welcome to the team —', ind:['healthcare','manufacturing','finance','tech','proserv','retail','education','public'], role:['ld','hr','comms'], goal:['cost','onboard','engage'], w:1},
+    {cat:'Onboarding', t:'A "your first week" onboarding series', d:'Give every new {IND} hire the same strong start: a short series — welcome from a leader, tools & systems, who\'s who, first-week checklist — that plays automatically on day one.', ex:'Record a 6-part first-week series once; it greets every new joiner from now on.', tc:'3:40', m:'Clone it for every hire', cap:'Here\'s how your first week works', ind:['healthcare','manufacturing','finance','tech','proserv','retail','education','public'], role:['hr','ld'], goal:['onboard','engage','cost']},
+    {cat:'Compliance', t:'Compliance training people actually finish', d:'Replace the 45-slide annual module with a tight, watchable video and a built-in knowledge check — essential in {IND}, where "we sent the PDF" isn\'t evidence of training.', ex:'Rebuild your code-of-conduct module as a 4-minute video with a quiz at the end.', tc:'4:00', m:'Update once, re-issue instantly', cap:'This year\'s code of conduct', ind:['healthcare','manufacturing','finance','public','retail'], role:['compliance','ld'], goal:['compliance','engage']},
+    {cat:'Global', t:'One video, every language your teams speak', d:'Make a training video once and publish it in 30+ languages with native voiceover — so a {IND} team in every region gets the same standard without re-shooting anything.', ex:'Localize your top safety video into every market you operate in, from one script.', tc:'2:30', m:'1 script · 30+ languages', cap:'Safety first, in every language', ind:['manufacturing','healthcare','finance','tech','retail','public'], role:['ld','ops','compliance'], goal:['global','compliance','cost']},
+    {cat:'Enablement', t:'"What\'s new this release" for your sales team', d:'Reps won\'t read the release notes. Give them a 90-second video before every launch so {ORG} walks into customer calls actually knowing what shipped.', ex:'Record a 90-second product-update video the day before your next release.', tc:'1:30', m:'Weekly cadence, zero studio', cap:'3 things that shipped this week', ind:['tech','finance','healthcare','proserv'], role:['sales','ld'], goal:['sales_ramp','onboard']},
+    {cat:'Process', t:'Film an SOP once — update the text, not the shoot', d:'Capture a process as a step-by-step video for {IND} teams. When the process changes, edit the script and re-publish in minutes instead of re-filming.', ex:'Turn your most-asked "how do we do X?" process into a video walkthrough.', tc:'3:15', m:'Re-edit, don\'t re-shoot', cap:'Step 1 of 5: before you begin', ind:['manufacturing','healthcare','retail','public','proserv'], role:['ops','ld'], goal:['sop','cost']},
+    {cat:'Enablement', t:'A how-to library for your internal tools', d:'Build a shelf of 2-minute "how to do X in our system" videos so {ORG} stops answering the same question in Slack and new joiners self-serve.', ex:'Record the 10 questions your team asks most about your core systems.', tc:'2:00', m:'Deflect repeat questions', cap:'How to raise a request', ind:['tech','finance','proserv','public','healthcare'], role:['ops','cs','ld'], goal:['onboard','sop','customer_ed']},
+    {cat:'Scenario', t:'Branching roleplay for the tricky conversations', d:'Build a choose-your-response scenario — a hard customer, a safety call, an objection — where {IND} learners pick what to say and see how it plays out. Practice without the real-world risk.', ex:'Script a "difficult customer" branch where each choice leads somewhere different.', tc:'4:20', m:'Interactive, not passive', cap:'What would you say next?', ind:['healthcare','finance','tech','retail','proserv','public'], role:['sales','hr','cs'], goal:['engage','sales_ramp']},
+    {cat:'Customer Ed', t:'Product tutorials that lift activation', d:'Swap your wall-of-text help center for short avatar-led tutorials. For {ORG}, better-onboarded customers stick around — the same logic that makes this worth doing internally.', ex:'Turn your "getting started" help article into a 3-minute guided video.', tc:'3:00', m:'Higher completion than docs', cap:'Let\'s get you set up', ind:['tech','finance','healthcare','education'], role:['cs','comms'], goal:['customer_ed','engage']},
+    {cat:'Comms', t:'A monthly update people actually watch', d:'Replace the all-hands email nobody reads with a 2-minute leadership update. Script it, pick the avatar, publish — no camera crew, no calendar Tetris.', ex:'Turn this month\'s company update into a short video from a leader.', tc:'2:20', m:'No camera, no crew', cap:'This month at {ORG}', ind:['healthcare','manufacturing','finance','tech','proserv','retail','education','public'], role:['comms','hr'], goal:['engage']},
+    {cat:'Frontline', t:'60-second training for deskless teams', d:'Store, floor and field staff don\'t sit at a laptop. Give {IND} frontline teams mobile-friendly, single-topic videos they watch at shift start.', ex:'Make a 60-second "start of shift" refresher for this week\'s focus.', tc:'1:00', m:'Built for mobile & shift work', cap:'Today\'s one thing', ind:['retail','manufacturing','healthcare'], role:['ld','ops'], goal:['onboard','compliance','engage']},
+    {cat:'Clinical', t:'Standardize a clinical or safety protocol', d:'Turn a hand-hygiene, device-handling or patient-safety protocol into one consistent video every site trains from — no more "it depends who taught you".', ex:'Film your most safety-critical protocol as the single source of truth.', tc:'3:30', m:'One standard, every site', cap:'The correct procedure is —', ind:['healthcare'], role:['compliance','ld','ops'], goal:['compliance','sop']},
+    {cat:'Compliance', t:'Regulatory refreshers, identical everywhere', d:'AML, conduct, data-handling — give {IND} teams a refresher that\'s the same standard in every region, localized in language but never in rigor.', ex:'Build this year\'s regulatory refresher once and roll it out globally.', tc:'4:10', m:'Audit-ready & consistent', cap:'Your annual refresher', ind:['finance','public','healthcare'], role:['compliance','ld'], goal:['compliance','global']},
+    {cat:'Compliance', t:'Security awareness that sticks', d:'A phishing-awareness short with a "do you click?" branch, refreshed each quarter so security stays top-of-mind for everyone at {ORG} — not just IT.', ex:'Create a "spot the phish" interactive video for the whole company.', tc:'2:45', m:'Refresh quarterly in minutes', cap:'Would you click this link?', ind:['tech','finance','healthcare','manufacturing','proserv','public','retail','education'], role:['compliance','ld','ops'], goal:['compliance','engage']},
+    {cat:'Academy', t:'A certification track wired into your LMS', d:'Build a SCORM-ready course with quizzes for {IND} learners (or your customers) that plugs straight into the LMS you already run.', ex:'Package your core course as a SCORM certification with a final assessment.', tc:'5:00', m:'SCORM-ready for your LMS', cap:'Module 3 · Assessment', ind:['education','tech','healthcare','finance'], role:['ld','cs'], goal:['customer_ed','sales_ramp','engage']},
+    {cat:'Support', t:'Just-in-time answers at the moment of need', d:'Short "how do I…" videos surfaced right where {ORG} works, instead of a 60-page manual nobody opens. Support tickets drop, confidence goes up.', ex:'Replace your five most-viewed help articles with quick videos.', tc:'1:45', m:'Beats a 60-page manual', cap:'Here\'s the quick way', ind:['tech','finance','manufacturing','retail','public','healthcare','proserv','education'], role:['cs','ops'], goal:['sop','customer_ed']}
+  ];
+
+  var state = {step:1, company:'', industry:null, role:null, goals:[]};
+  var STEPS = [null,'industry','team','goals','storyboard'];
+  var stage = document.getElementById('stage');
+  var stripEl = document.getElementById('strip');
+
+  function indName(){ var i=INDUSTRIES.filter(function(x){return x.k===state.industry;})[0]; return i?i.n:''; }
+  function indAdj(){
+    var map={healthcare:'healthcare',manufacturing:'manufacturing',finance:'financial-services',tech:'tech',proserv:'professional-services',retail:'retail',education:'training',public:'public-sector'};
+    return map[state.industry]||'your';
+  }
+  function org(){ return state.company.trim() || 'your team'; }
+  function fill(s){ return s.replace(/\{ORG\}/g, org()).replace(/\{IND\}/g, indAdj()); }
+  function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+
+  function hexA(hex,a){ var n=parseInt(hex.slice(1),16); return 'rgba('+(n>>16&255)+','+(n>>8&255)+','+(n&255)+','+a+')'; }
+
+  function renderStrip(){
+    var labels=[['01','Industry'],['02','Team'],['03','Goals'],['04','Storyboard']];
+    stripEl.innerHTML = labels.map(function(l,i){
+      var s=i+1, cls='frame'; if(s<state.step)cls+=' done'; if(s===state.step)cls+=' active';
+      return '<div class="'+cls+'"><div class="no">'+l[0]+'</div><div class="lbl">'+l[1]+'</div></div>';
+    }).join('');
+  }
+
+  function toast(msg){
+    var t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+    clearTimeout(t._t); t._t=setTimeout(function(){t.classList.remove('show');},2200);
+  }
+
+  function render(){
+    renderStrip();
+    if(state.step===1) stepIndustry();
+    else if(state.step===2) stepTeam();
+    else if(state.step===3) stepGoals();
+    else if(state.step===4) results();
+    var y=stripEl.getBoundingClientRect().top+window.scrollY-14;
+    if(state.step>1) window.scrollTo({top:y, behavior: reduce?'auto':'smooth'});
+  }
+
+  function stepIndustry(){
+    stage.innerHTML =
+      '<div class="screen panel">'+
+        '<div class="step-head"><h2 class="step-q">First — what field are you in?</h2>'+
+        '<p class="step-note">This shapes which use cases we put in front of you. Add your company name for a more personal storyboard (optional).</p></div>'+
+        '<div class="field"><label for="co">Company name — optional</label><input id="co" type="text" placeholder="e.g. Northwind Health" value="'+esc(state.company)+'" autocomplete="off"></div>'+
+        '<div class="field"><label>Your industry</label>'+
+        '<div class="grid-ind" role="group" aria-label="Industry">'+
+        INDUSTRIES.map(function(i){
+          var on=state.industry===i.k;
+          return '<button class="card-sel" data-ind="'+i.k+'" aria-pressed="'+on+'">'+
+            '<span class="ic"><svg width="24" height="24" viewBox="0 0 24 24">'+ICON[i.k]+'</svg></span>'+
+            '<span class="nm">'+i.n+'</span></button>';
+        }).join('')+
+        '</div></div>'+
+        '<div class="nav"><span class="hint">Pick one to continue</span></div>'+
+      '</div>';
+    var co=document.getElementById('co');
+    co.addEventListener('input', function(){ state.company=co.value; });
+    Array.prototype.forEach.call(stage.querySelectorAll('[data-ind]'), function(b){
+      b.addEventListener('click', function(){
+        state.industry=b.getAttribute('data-ind');
+        Array.prototype.forEach.call(stage.querySelectorAll('[data-ind]'),function(x){x.setAttribute('aria-pressed', x===b);});
+        setTimeout(function(){ state.step=2; render(); }, reduce?0:220);
+      });
+    });
+  }
+
+  function stepTeam(){
+    stage.innerHTML =
+      '<div class="screen panel">'+
+        '<div class="step-head"><h2 class="step-q">Who\'s making the videos?</h2>'+
+        '<p class="step-note">We\'ll bias the storyboard toward what your team owns day to day.</p></div>'+
+        '<div class="chips" role="group" aria-label="Team">'+
+        ROLES.map(function(r){
+          var on=state.role===r.k;
+          return '<button class="chip" data-role="'+r.k+'" aria-pressed="'+on+'">'+
+            '<span class="tick">'+TICK+'</span>'+r.n+'</button>';
+        }).join('')+
+        '</div>'+
+        '<div class="nav">'+
+          '<button class="btn ghost" data-back>← Back</button>'+
+          '<span class="hint" style="margin-left:0"></span>'+
+          '<button class="btn primary" data-next '+(state.role?'':'disabled')+'>Continue →</button>'+
+        '</div>'+
+      '</div>';
+    Array.prototype.forEach.call(stage.querySelectorAll('[data-role]'), function(b){
+      b.addEventListener('click', function(){
+        state.role=b.getAttribute('data-role');
+        Array.prototype.forEach.call(stage.querySelectorAll('[data-role]'),function(x){x.setAttribute('aria-pressed', x===b);});
+        var nx=stage.querySelector('[data-next]'); nx.disabled=false;
+        setTimeout(function(){ state.step=3; render(); }, reduce?0:220);
+      });
+    });
+    stage.querySelector('[data-back]').addEventListener('click', function(){ state.step=1; render(); });
+    stage.querySelector('[data-next]').addEventListener('click', function(){ if(state.role){state.step=3; render();} });
+  }
+
+  function stepGoals(){
+    stage.innerHTML =
+      '<div class="screen panel">'+
+        '<div class="step-head"><h2 class="step-q">What are you trying to move?</h2>'+
+        '<p class="step-note">Pick up to three. These carry the most weight in your storyboard.</p></div>'+
+        '<div class="chips" role="group" aria-label="Goals">'+
+        GOALS.map(function(g){
+          var on=state.goals.indexOf(g.k)>-1;
+          return '<button class="chip" data-goal="'+g.k+'" aria-pressed="'+on+'">'+
+            '<span class="tick">'+TICK+'</span>'+g.n+'</button>';
+        }).join('')+
+        '</div>'+
+        '<div class="nav">'+
+          '<button class="btn ghost" data-back>← Back</button>'+
+          '<span class="hint">'+state.goals.length+' / 3 selected</span>'+
+          '<button class="btn primary" data-gen '+(state.goals.length?'':'disabled')+'>Cut my storyboard →</button>'+
+        '</div>'+
+      '</div>';
+    Array.prototype.forEach.call(stage.querySelectorAll('[data-goal]'), function(b){
+      b.addEventListener('click', function(){
+        var k=b.getAttribute('data-goal'), i=state.goals.indexOf(k);
+        if(i>-1) state.goals.splice(i,1);
+        else { if(state.goals.length>=3){ toast('Pick your top three — that\'s where the focus is.'); return; } state.goals.push(k); }
+        b.setAttribute('aria-pressed', state.goals.indexOf(k)>-1);
+        stage.querySelector('.hint').textContent=state.goals.length+' / 3 selected';
+        stage.querySelector('[data-gen]').disabled=!state.goals.length;
+      });
+    });
+    stage.querySelector('[data-back]').addEventListener('click', function(){ state.step=2; render(); });
+    stage.querySelector('[data-gen]').addEventListener('click', function(){ if(state.goals.length) generate(); });
+  }
+
+  function score(uc){
+    var s=0;
+    for(var i=0;i<state.goals.length;i++){ if(uc.goal.indexOf(state.goals[i])>-1) s+=3; }
+    if(uc.ind.indexOf(state.industry)>-1) s+=2.2;
+    if(uc.role.indexOf(state.role)>-1) s+=1.4;
+    s += (uc.w||0)*0.6;
+    return s;
+  }
+  function ranked(){
+    return UC.map(function(u,i){ return {u:u, s:score(u), i:i}; })
+      .sort(function(a,b){ return b.s-a.s || a.i-b.i; })
+      .slice(0,5).map(function(x){return x.u;});
+  }
+
+  function generate(){
+    stage.innerHTML='<div class="screen panel"><div class="loading">'+
+      '<div class="clap"><div class="stick"></div><div class="board"></div></div>'+
+      '<div class="m">Cutting your storyboard…</div></div></div>';
+    setTimeout(function(){ state.step=4; render(); }, reduce?120:900);
+  }
+
+  function thumb(uc, feat){
+    var c=CAT_COLOR[uc.cat]||'#8B6BFF';
+    var bg='background:linear-gradient(145deg,'+hexA(c,.55)+','+hexA('#0F0B1A',.92)+'),radial-gradient(120% 90% at 30% 10%,'+hexA(c,.35)+',transparent 60%);';
+    return '<div class="thumb" style="'+bg+'">'+
+      '<span class="rec"><i></i>REC</span><span class="tc">'+uc.tc+'</span>'+
+      '<div class="av"><div class="head"></div><div class="body"></div></div>'+
+      '<div class="play">'+PLAY+'</div>'+
+      '<div class="cap"><span>'+esc(fill(uc.cap))+'</span></div></div>';
+  }
+
+  function sceneCard(uc, feat, idx){
+    var c=CAT_COLOR[uc.cat]||'#8B6BFF';
+    var body='<div class="scene-body">'+
+      (feat?'<div class="startbadge"><i></i>Scene 01 · Start here</div>':'')+
+      '<div class="cat"><span class="cdot" style="background:'+c+'"></span>'+esc(uc.cat)+'</div>'+
+      '<h3>'+esc(fill(uc.t))+'</h3>'+
+      '<p>'+esc(fill(uc.d))+'</p>'+
+      '<div class="ex"><span class="k">First video to make</span><span class="v">'+esc(fill(uc.ex))+'</span></div>'+
+      '<div class="scene-foot"><span class="metric">'+PLAYS+esc(uc.m)+'</span>'+
+        (feat?'<button class="btn primary feat-cta" data-cta>Make this video →</button>':'')+
+      '</div></div>';
+    var st = reduce?'':'animation-delay:'+(idx*80)+'ms';
+    return '<article class="scene'+(feat?' feat':'')+'" style="'+st+'">'+thumb(uc,feat)+body+'</article>';
+  }
+  var PLAYS='<svg width="12" height="12" viewBox="0 0 16 16" style="flex:none"><circle cx="8" cy="8" r="7" fill="none" stroke="#46E0B0" stroke-width="1.4"/><path d="M6.5 5.5v5l4-2.5z" fill="#46E0B0"/></svg>';
+
+  function results(){
+    var list=ranked(), feat=list[0], rest=list.slice(1);
+    var goalNames=state.goals.map(function(k){return GOALS.filter(function(g){return g.k===k;})[0].n;});
+    var who=state.company.trim()? '<em>'+esc(state.company.trim())+'</em>' : 'a <em>'+esc(indName().toLowerCase())+'</em> team';
+    var roleName=ROLES.filter(function(r){return r.k===state.role;})[0].n;
+
+    stage.innerHTML=
+      '<div class="screen">'+
+        '<div class="res-head">'+
+          '<div class="brief">'+
+            '<span class="b">Industry <b>'+esc(indName())+'</b></span>'+
+            '<span class="b">Team <b>'+esc(roleName)+'</b></span>'+
+            goalNames.map(function(g){return '<span class="b">Goal <b>'+esc(g)+'</b></span>';}).join('')+
+          '</div>'+
+          '<h2 class="res-title">Here\'s how '+who+' would put Colossyan to work.</h2>'+
+        '</div>'+
+        '<div class="board-grid">'+
+          sceneCard(feat,true,0)+
+          rest.map(function(u,i){return sceneCard(u,false,i+1);}).join('')+
+        '</div>'+
+        '<div class="band">'+
+          '<div class="bt"><h4>The first three videos decide everything.</h4>'+
+          '<p>Accounts that turn a use case into a habit in month one are the ones that renew. Start with Scene 01, then work down the list.</p></div>'+
+          '<div class="acts">'+
+            '<button class="btn primary" data-cta>Book a storyboard session</button>'+
+            '<button class="btn" data-cta>Browse matching templates</button>'+
+            '<button class="btn ghost" data-restart>Start over</button>'+
+          '</div>'+
+        '</div>'+
+      '</div>';
+    Array.prototype.forEach.call(stage.querySelectorAll('[data-cta]'), function(b){
+      b.addEventListener('click', function(){ toast('Concept prototype — this is where the real Colossyan flow would kick in.'); });
+    });
+    stage.querySelector('[data-restart]').addEventListener('click', function(){
+      state={step:1, company:'', industry:null, role:null, goals:[]}; render();
+    });
+  }
+
+  render();
+})();
+</script>
